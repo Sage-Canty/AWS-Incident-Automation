@@ -103,3 +103,6 @@ class ECSChecker:
         except ClientError as e:
             logger.warning("Could not fetch stopped tasks: %s", e)
             return []
+
+    def get_stopped_task_exit_codes(self, service_name: str, limit: int = 5) -> list[dict]:
+        return self._get_stopped_task_reasons(f"{self.env}-{service_name}", limit=limit)
