@@ -37,3 +37,17 @@ def test_cloudwatch_error_rate_no_data():
     result = CloudWatchChecker(env="dev").get_error_rate(service="api")
     assert result["error_rate"] == 0.0
     assert result["above_threshold"] is False
+
+
+@mock_aws
+def test_ecs_stopped_tasks_empty():
+    boto3.client("ecs", region_name="us-east-1").create_cluster(clusterName="dev-cluster")
+    result = ECSChecker(env="dev").get_stopped_task_exit_codes("api")
+    assert result == []
+
+
+@mock_aws
+def test_cloudwatch_cpu_memory_no_data():
+    result = CloudWatchChecker(env="dev").get_ecs_cpu_memory("api")
+    assert result["cpu_max_pct"] is None
+    assert result["memory_max_pct"] is None
