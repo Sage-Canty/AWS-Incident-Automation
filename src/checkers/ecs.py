@@ -12,7 +12,7 @@ from botocore.config import Config
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
-BOTO_CONFIG = Config(retries={"max_attempts": 3, "mode": "adaptive"})
+BOTO_CONFIG = Config(retries={"max_attempts": 3, "mode": "adaptive"})  # exponential backoff on throttling
 
 
 class ECSChecker:
