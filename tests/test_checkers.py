@@ -51,3 +51,21 @@ def test_cloudwatch_cpu_memory_no_data():
     result = CloudWatchChecker(env="dev").get_ecs_cpu_memory("api")
     assert result["cpu_max_pct"] is None
     assert result["memory_max_pct"] is None
+
+
+@mock_aws
+def test_cloudwatch_errors_with_real_log_group():
+    import time
+    logs = boto3.client("logs", region_name="us-east-1")
+    logs.create_log_group(logGroupName="/ecs/dev/api")
+    logs.create_log_stream(logGroupName="/ecs/dev/api", logStreamName="ecs/api/test")
+    logs.put_log_events(
+        logGroupName="/ecs/dev/api",
+        logStreamName="ecs/api/test",
+        logEvents=[{"timestamp": int(time.time() * 1000), "message": "ERROR: test error"}],
+    )
+    result = CloudWatchChecker(env="dev").get_recent_errors(service="api", minutes=60)
+    assert isinstance(result, list)
+    for entry in result:
+        assert "timestamp" in entry
+        assert "message" in entry
