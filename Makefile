@@ -18,3 +18,6 @@ triage:
 
 health:
 	python -m src.cli --env $(ENV) --region $(REGION) health
+
+logs:
+	python -m src.cli --env $(ENV) --region $(REGION) logs --service $(SERVICE)
