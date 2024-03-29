@@ -67,3 +67,7 @@ make lint
 
 - `0` — healthy
 - `1` — incident detected
+
+---
+
+Makes `triage` usable as a deployment health gate — exit 1 blocks the pipeline if the service is in incident state.
