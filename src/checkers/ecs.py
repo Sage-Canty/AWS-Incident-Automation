@@ -106,3 +106,6 @@ class ECSChecker:
 
     def get_stopped_task_exit_codes(self, service_name: str, limit: int = 5) -> list[dict]:
         return self._get_stopped_task_reasons(f"{self.env}-{service_name}", limit=limit)
+
+# describe_services accepts max 10 ARNs per call.
+# check_all_services batches in groups of 10 accordingly.
